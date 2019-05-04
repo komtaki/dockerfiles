@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  nginx:
+    build: 
+      context: ./development/nginx
+      args:
+        NGINX_VERSION: "1.4.*"
+    volumes:
+      - .:/var/www/html/current/
+      - ./development/nginx/default.conf:/etc/nginx/sites-available/default
+    ports:
+      - 11080:80
+    depends_on:
+      - app
+  app:
+    build: 
+      context: ./development/app
+      args:
+        RUBY_VERSION: "2.3.0"
+        NODE_VERSION: "10.15.3"
+    volumes:
+      - .:/var/www/html/current/
