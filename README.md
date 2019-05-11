@@ -1,2 +1,2 @@
 # docker
-Dockerfileを管理します
+Dockerfileの備忘録
