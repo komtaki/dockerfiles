@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  # backend
+  redis:
+    image: redis
+    ports:
+      - "6379"
+  # dkron
+  dkron1:
+    image: dkron/dkron:v1
+    depends_on:
+      - redis
+    ports:
+      - "8080:8080"
+      - "8946"
+    command: &command agent --server --backend=redis --backend-machine=redis:6379 --join=dkron1:8946 --join=dkron2:8946 --join=dkron3:8946 --tag role=dkron --log-level=warning
+  dkron2:
+    image: dkron/dkron:v1
+    depends_on:
+      - redis
+    ports:
+      - "8081:8080"
+      - "8946"
+    command: *command
+  dkron3:
+    image: dkron/dkron:v1
+    depends_on:
+      - redis
+    ports:
+      - "8082:8080"
+      - "8946"
+    command: *command
