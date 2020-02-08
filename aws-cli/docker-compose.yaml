@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+    aws-cli:
+        container_name: 'aws-cli'
+        build: ./
+        environment:
+            AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+            AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+            AWS_DEFAULT_REGION: ap-northeast-1
+            AWS_DEFAULT_OUTPUT: json
+        volumes:
+            - ./data:/data
+        tty: true
