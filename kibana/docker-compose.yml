@@ -45,8 +45,7 @@ services:
       - logstash
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
-    depends_on:
-     - logstash
+
   logstash:
     image: docker.elastic.co/logstash/logstash:7.6.2
     environment:
