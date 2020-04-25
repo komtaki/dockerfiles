@@ -2,19 +2,22 @@ version: "3.7"
 
 services:
   kibana:
-    image: docker.elastic.co/kibana/kibana:5.6.0
+    image: docker.elastic.co/kibana/kibana:7.6.2
     environment:
       - LOGSPOUT=ignore
       - ELASTICSEARCH_URL=http://elasticsearch:9200
       - XPACK_MONITORING_ENABLED=false
       - XPACK_SECURITY_ENABLED=false
+      - server.port=5601
+      - server.host=0.0.0.0
+      - elasticsearch.hosts=http://localhost:9200
     links:
       - elasticsearch
     ports:
       - 5601:5601
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
     environment:
       - LOGSPOUT=ignore
       - node.name=dev-log-kibana
@@ -24,6 +27,8 @@ services:
       - xpack.watcher.enabled=false
       - xpack.graph.enabled=false
       - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - network.host=0.0.0.0
+      - discovery.type=single-node
     ulimits:
       memlock:
         soft: -1
@@ -32,7 +37,7 @@ services:
         soft: 65536
         hard: 65536
   logspout:
-    image: gliderlabs/logspout:v3.2.4
+    image: gliderlabs/logspout:v3.2.8
     command: syslog://logstash:5000
     environment:
       - RETRY_COUNT=100
@@ -40,8 +45,10 @@ services:
       - logstash
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
+    depends_on:
+     - logstash
   logstash:
-    image: docker.elastic.co/logstash/logstash:5.6.0
+    image: docker.elastic.co/logstash/logstash:7.6.2
     environment:
       - LOGSPOUT=ignore
       - XPACK_MONITORING_ENABLED=false
