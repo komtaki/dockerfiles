@@ -1,7 +1,6 @@
-FROM python:3.6
+FROM python:3.9-slim
 
 ARG pip_installer="https://bootstrap.pypa.io/get-pip.py"
-ARG awscli_version="1.17.5"
 
 RUN mkdir /data
 RUN chmod -x /data
@@ -9,7 +8,7 @@ RUN chmod -x /data
 ENV PATH $PATH:/root/.local/bin
 
 # Install awscli
-RUN pip install awscli==${awscli_version}
+RUN pip install awscli
 
 # Install sam
 RUN pip install --user --upgrade aws-sam-cli
